@@ -2,42 +2,35 @@ import java.util.Stack;
 
 public class EditorTexto {
 
-    private No topo;
-
+    private Stack<Acao> historico;
     public EditorTexto() {
-        this.topo = null;
+        this.historico = new Stack<>();
     }
-    // Insere uma nova ação no topo da pilha encadeada
+
     public void realizarAcao(Acao novaAcao) {
-        No novoNo = new No(novaAcao);
-        novoNo.proximo = topo;
-        topo = novoNo;
-        System.out.println("Ação realizada -> " + novaAcao.toString());
+        historico.push(novaAcao);
+        System.out.println("Açao realizada: " + novaAcao.toString());
     }
 
-    // Remove a ação do topo da pilha encadeada (Desfazer)
-    public void desfazer() {
-        if (topo == null) {
-            System.out.println("Aviso: Não há ações para desfazer.");
+    public void desfazer(){
+        if(historico.isEmpty()){
+            System.out.println("Não a nada para ser desfeito");
             return;
         }
-        Acao desfeita = topo.acao;
-        topo = topo.proximo;
-        System.out.println("Desfazendo -> " + desfeita.toString());
+        Acao acaoDesfeita = historico.pop();
+        System.out.println("Desfeito: " + acaoDesfeita.toString());
     }
 
-    // Percorre a lista encadeada do topo até o fim para listar as ações
-    public void listarAcoes() {
-        if (topo == null) {
-            System.out.println("Aviso: Histórico vazio. Nenhuma ação para listar.");
+    public void listarAcoes(){
+        if(historico.isEmpty()){
+            System.out.println("Não a nada para ser listado");
             return;
         }
-        System.out.println("\n--- Histórico de Ações (Topo -> Base) ---");
-        No atual = topo; // Começa pelo topo
-        while (atual != null) {
-            System.out.println("-> " + atual.acao.toString());
-            atual = atual.proximo; // Move para o nó de baixo
+        System.out.println("-----Lista de Açoes-----");
+        for(int i = historico.size() -1; i >= 0; i-- ){
+            System.out.println();
+            System.out.println(historico.get(i).toString());
         }
-        System.out.println("------------------------------------------");
+        System.out.println("---------------------------");
     }
 }
